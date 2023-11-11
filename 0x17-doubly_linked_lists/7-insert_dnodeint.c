@@ -1,44 +1,56 @@
-#include "lists.h"
+unsigned int last_node_index(dlistint_t **h)
+{
+	unsigned int i = 0;
+	dlistint_t *node = *h;
+
+	while (node != NULL)
+	{
+		node = node->next;
+		i++;
+	}
+	return (i);
+}
+
 
 /**
- * insert_dnodeint_at_index - func to insert node at index
- * @h: double ptr to the beginning of the list
- * @idx: index at which to add
- * @n: data to be added
- * Return: address of the new node or NULL
+ * insert_dnodeint_at_index - inserts a new node at a given position.
+ * @h: doubly linked list.
+ * @idx: index.
+ * @n: value.
+ * Return: the address of the new node, or NULL if it failed.
  */
 dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 {
-	dlistint_t *new, *old;
-	unsigned int a;
+	unsigned int i;
+	dlistint_t *newnode, *temp = *h;
 
+	newnode = malloc(sizeof(dlistint_t));
+	if (newnode == NULL)
+		return (NULL);
 	if (h == NULL)
 		return (NULL);
-
-	if (idx == 0)
-		return (add_dnodeint(h, n));
-
-	old = *h;
-
-	for (a = 0; old != NULL && a < idx; a++)
-		old = old->next;
-
-	if (old == NULL && a == idx)
-		return (add_dnodeint_end(h, n));
-
-	else if (old != NULL)
+	if (idx == 0 && h != NULL)
 	{
-		new = malloc(sizeof(dlistint_t));
-
-		if (new == NULL)
-			return (NULL);
-		new->n = n;
-		old->prev->next = new;
-		new->prev = old->prev;
-		old->prev = new;
-		new->next = old;
-
-		return (new);
+		return (add_dnodeint(h, n)); /* insert at beginning */
+	}
+	if (idx == last_node_index(h) /* last node */)
+	{
+		return (add_dnodeint_end(h, n)); /* insert at end */
+	}
+	while (temp != NULL)
+	{
+		if (idx == i)
+		{
+			newnode->n = n;
+			newnode->next = temp->next;
+			newnode->prev = temp;
+			if (temp->next != NULL)
+				temp->next->prev = newnode;
+			temp->next = newnode;
+			return (temp);
+		}
+		temp = temp->next;
+		i++;
 	}
 	return (NULL);
 }
